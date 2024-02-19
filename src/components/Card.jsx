@@ -4,38 +4,55 @@ import "./card.css";
 
 const Card = () => {
   const [data, setData] = useContext(providerContext);
-  const totalPrice = data.reduce((total, data) => total + data.price * (data.quantity || 1), 0)
-  const totalCount = data.reduce((total, data) => total + (data.quantity || 1 ), 0)
-  const handleIncrease = (id,quantity) => {
-    setData((prev) => { 
-       return prev.map((item) => {
-        if(item.id === id) {
-            return {...item, quantity: (item.quantity + 1) || (quantity + 1) }
+  const totalPrice = data.reduce(
+    (total, data) => total + data.price * (data.quantity || 1),
+    0
+  );
+  const totalCount = data.reduce(
+    (total, data) => total + (data.quantity || 1),
+    0
+  );
+  const handleIncrease = (id, quantity) => {
+    setData((prev) => {
+      return prev.map((item) => {
+        if (item.id === id) {
+          return { ...item, quantity: item.quantity + 1 || quantity + 1 };
         }
-         return item
-       })
-    })
-  }
-  const handleDecrease = (id,quantity) => {
-    setData((prev) => { 
-       return prev.map((item) => {
-        if(item.id === id && quantity > 0) {
-            return {...item, quantity: (item.quantity - 1) || (quantity - 1) }
+        return item;
+      });
+    });
+  };
+  const handleDecrease = (id, quantity) => {
+    setData((prev) => {
+      return prev.map((item) => {
+        if (item.id === id && quantity > 0) {
+          return { ...item, quantity: item.quantity - 1 || quantity - 1 };
         }
-         return item
-       })
-    })
-  }
-  const handleRemove  = (id) => {
-           setData(pval => pval.filter((item,index) => item.id !== id)) 
-  }
+        return item;
+      });
+    });
+  };
+  const handleRemove = (id) => {
+    setData((pval) => pval.filter((item, index) => item.id !== id));
+  };
   return (
     <div>
-      <div className="d-flex justify-content-center sticky-top">
-      <div className="border border-dark w-75 p-2 bg-dark rounded-2 mb-2 mt-4 h-75 text-center">
-            <p className="text-white">Total Price : {totalPrice} </p>
-            <p className="text-white">Total Quantity : {totalCount} </p>
-      </div>
+      <div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-body-tertiary">
+        <div class="col-md-6 p-lg-5 mx-auto my-5">
+          <h1 class="display-3 fw-bold">Shop Cart</h1>
+          <h3 class="fw-normal text-muted mb-3">
+            Buy anything you want with Aperture
+          </h3>
+          <div class="d-flex gap-3 justify-content-center lead fw-normal">
+            <img
+              src="src\assets\pexels-tyler-lastovich-699122.jpg"
+              alt="Shoes Collection"
+              width={"80%"}
+            />
+          </div>
+        </div>
+        <div class="product-device shadow-sm d-none d-md-block"></div>
+        <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
       </div>
       <div class="row row-cols-1 row-cols-md-3 g-4">
         {data.map((item, index) => {
@@ -91,7 +108,9 @@ const Card = () => {
                         <h5 class="card-title text-center border-top border-bottom border-dark p-2 fw-bold">
                           {item.title}
                         </h5>
-                        <p class="card-text text-center fw-bold">{item.description}</p>
+                        <p class="card-text text-center fw-bold">
+                          {item.description}
+                        </p>
                         <p class="card-text text-center text-danger fw-bold">
                           {`Discount : ${item.discountPercentage} % `}
                         </p>
@@ -100,19 +119,38 @@ const Card = () => {
                         <div className="border-top border-bottom border-dark pt-2 d-flex justify-content-between">
                           <p className="card-text mt-3 fw-bold">Quantity: </p>
                           <div className="border border-dark w-25 mb-2 rounded-2 d-flex justify-content-between">
-                            <button className="btn btn-md" onClick={() => {handleDecrease(item.id, item.quantity || 1)}}>-</button>
-                            <p className="mt-3"> {item.quantity || 1 }</p>
-                            <button className="btn btn-md" onClick={() => {handleIncrease(item.id, item.quantity || 1)}}>+</button>
+                            <button
+                              className="btn btn-md"
+                              onClick={() => {
+                                handleDecrease(item.id, item.quantity || 1);
+                              }}
+                            >
+                              -
+                            </button>
+                            <p className="mt-3"> {item.quantity || 1}</p>
+                            <button
+                              className="btn btn-md"
+                              onClick={() => {
+                                handleIncrease(item.id, item.quantity || 1);
+                              }}
+                            >
+                              +
+                            </button>
                           </div>
                         </div>
                         <div className="border-bottom border-dark pt-2 d-flex justify-content-between">
-                            <p className="fw-bold">Price:</p>
-                            <p className="px-5 fw-bold">{item.price || 1}</p>
+                          <p className="fw-bold">Price:</p>
+                          <p className="px-5 fw-bold">{item.price || 1}</p>
                         </div>
                         <div className="pt-2 text-center">
-                        <button className="btn btn-danger" onClick={() => {handleRemove(item.id)}}>
-                             Remove Cart
-                        </button>
+                          <button
+                            className="btn btn-danger"
+                            onClick={() => {
+                              handleRemove(item.id);
+                            }}
+                          >
+                            Remove Cart
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -122,6 +160,18 @@ const Card = () => {
             </>
           );
         })}
+      </div>
+      <div className="d-flex justify-content-center">
+        <div className="border-bottom border-top border-dark w-75 p-2 mb-2 mt-4 h-75 ">
+          <div className="d-flex justify-content-between">
+            <p className="text-dark ">Total Quantity : </p>
+            <p className="text-dark">{totalCount} </p>
+          </div>
+          <div className="d-flex justify-content-between">
+            <p className="text-dark ">Total Price </p>
+            <p className="text-dark"> {totalPrice} </p>
+          </div>
+        </div>
       </div>
     </div>
   );
