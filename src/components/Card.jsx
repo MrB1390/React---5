@@ -1,39 +1,127 @@
-import React, { useContext } from "react";
-import { providerContext } from "../utils/DataContext";
+import React, { useEffect } from "react";
 import "./card.css";
+import { useDispatch, useSelector } from "react-redux";
+import { cardData, increase_quan, remove_prod,decrease_quan } from "../utils/CardSlice";
 
 const Card = () => {
-  const [data, setData] = useContext(providerContext);
-  const totalPrice = data.reduce(
-    (total, data) => total + data.price * (data.quantity || 1),
-    0
-  );
-  const totalCount = data.reduce(
+  const dispatch = useDispatch();
+  const products = [
+    {
+        "id": 1,
+        "title": "iPhone 9",
+        "description": "An apple mobile which is nothing like apple",
+        "price": 549,
+        "discountPercentage": 12.96,
+        "rating": 4.69,
+        "stock": 94,
+        "brand": "Apple",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/1/1.jpg",
+            "https://i.dummyjson.com/data/products/1/2.jpg",
+            "https://i.dummyjson.com/data/products/1/3.jpg",
+            "https://i.dummyjson.com/data/products/1/4.jpg",
+            "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
+        ]
+    },
+    {
+        "id": 2,
+        "title": "iPhone X",
+        "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+        "price": 899,
+        "discountPercentage": 17.94,
+        "rating": 4.44,
+        "stock": 34,
+        "brand": "Apple",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Samsung Universe 9",
+        "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
+        "price": 1249,
+        "discountPercentage": 15.46,
+        "rating": 4.09,
+        "stock": 36,
+        "brand": "Samsung",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/3/1.jpg"
+        ]
+    },
+    {
+        "id": 4,
+        "title": "OPPOF19",
+        "description": "OPPO F19 is officially announced on April 2021.",
+        "price": 280,
+        "discountPercentage": 17.91,
+        "rating": 4.3,
+        "stock": 123,
+        "brand": "OPPO",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/4/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/4/1.jpg",
+            "https://i.dummyjson.com/data/products/4/2.jpg",
+            "https://i.dummyjson.com/data/products/4/3.jpg",
+            "https://i.dummyjson.com/data/products/4/4.jpg",
+            "https://i.dummyjson.com/data/products/4/thumbnail.jpg"
+        ]
+    },
+    {
+        "id": 5,
+        "title": "Huawei P30",
+        "description": "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
+        "price": 499,
+        "discountPercentage": 10.58,
+        "rating": 4.09,
+        "stock": 32,
+        "brand": "Huawei",
+        "category": "smartphones",
+        "thumbnail": "https://i.dummyjson.com/data/products/5/thumbnail.jpg",
+        "images": [
+            "https://i.dummyjson.com/data/products/5/1.jpg",
+            "https://i.dummyjson.com/data/products/5/2.jpg",
+            "https://i.dummyjson.com/data/products/5/3.jpg"
+        ]
+    }
+]
+  const val = useSelector((state)=>state.val)
+  const totalPrice = useSelector((state) => 
+   state.val.reduce((total,data) => total + data.price * (data.quantity || 1), 0)
+    )
+  const totalCount = useSelector((state) =>
+  state.val.reduce(
     (total, data) => total + (data.quantity || 1),
     0
-  );
-  const handleIncrease = (id, quantity) => {
-    setData((prev) => {
-      return prev.map((item) => {
-        if (item.id === id) {
-          return { ...item, quantity: item.quantity + 1 || quantity + 1 };
-        }
-        return item;
-      });
-    });
-  };
-  const handleDecrease = (id, quantity) => {
-    setData((prev) => {
-      return prev.map((item) => {
-        if (item.id === id && quantity > 0) {
-          return { ...item, quantity: item.quantity - 1 || quantity - 1 };
-        }
-        return item;
-      });
-    });
-  };
+  ));
+ 
+  useEffect(()=>{
+    dispatch(cardData(products))
+  },[dispatch,val.products])
+
+  const handleIncrease = (id,quantity) =>{
+    if (quantity > 0){
+           dispatch(increase_quan({id,quantity}));
+    }
+  }
+  const handleDecrease = (id,quantity) =>{
+    if (quantity > 1){
+      dispatch(decrease_quan({id,quantity}));
+    }
+  }
+
   const handleRemove = (id) => {
-    setData((pval) => pval.filter((item, index) => item.id !== id));
+    dispatch(remove_prod({id}))
   };
   return (
     <div>
@@ -55,7 +143,7 @@ const Card = () => {
         <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
       </div>
       <div class="row row-cols-1 row-cols-md-3 g-4">
-        {data.map((item, index) => {
+        {val.map((item, index) => {
           return (
             <>
               <div>

@@ -1,56 +1,59 @@
-# React---5
-Context-API
-React Shopping Cart Application
-===============================
+# React---8
 
-This is a simple React shopping cart application that allows users to browse through a list of products, add items to their cart, adjust quantities, remove items from the cart, and see the total price and quantity of items in the cart.
+# React-Cart-Application using **Redux 
 
-Features
---------
+#### Components Structure:
 
-*   Display of products with images, titles, descriptions, prices, and quantities.
-*   Addition of items to the cart.
-*   Adjustment of item quantities in the cart.
-*   Removal of items from the cart.
-*   Calculation of total price and total quantity of items in the cart.
+1.  **Card Component (`Card.js`):**
+    
+    *   This component renders the shopping cart.
+    *   It utilizes Redux for state management.
+    *   It imports styles from `card.css`.
+    *   The component fetches card data and manages cart actions like increase, decrease, and remove products.
+2.  **Data Context Component (`DataContext.js`):**
+    
+    *   This component provides the Redux store to the application wrapped with React Redux's `Provider`.
+    *   It imports the `cardStore` from `CardStore.js`.
 
-Technologies Used
------------------
+#### Redux Setup:
 
-*   React: A JavaScript library for building user interfaces.
-*   HTML/CSS: For markup and styling.
-*   JavaScript: For scripting functionalities.
+1.  **CardSlice (`CardSlice.js`):**
+    
+    *   Defines a Redux slice for managing card-related state.
+    *   Actions include `cardData`, `increase_quan`, `decrease_quan`, and `remove_prod`.
+    *   Initial state is an empty array.
+2.  **CardStore (`CardStore.js`):**
+    
+    *   Configures the Redux store using `configureStore` from `@reduxjs/toolkit`.
+    *   Combines reducers, in this case, only `CardReducer`.
 
-Components
-----------
+#### Actions and Reducers:
 
-### App Component
+*   `cardData`: Updates the card data in the store.
+*   `increase_quan`: Increases the quantity of a product in the card.
+*   `decrease_quan`: Decreases the quantity of a product in the card.
+*   `remove_prod`: Removes a product from the card.
 
-The main component that wraps the entire application. It imports the `DataContext` component and the `Card` component.
+#### Other:
 
-### Card Component
+*   Images and other assets are assumed to be stored in relevant paths.
+*   Carousel functionality is implemented for displaying multiple images of a product.
 
-The `Card` component is responsible for rendering the product cards, managing the state of the cart, and providing functionalities like increasing/decreasing quantities and removing items from the cart.
+#### Usage:
 
-### DataContext Component
-
-The `DataContext` component is a context provider that manages the state of the products and cart data. It provides the product data to the entire application using the React Context API.
-
-How to Run
-----------
-
-1.  Clone the repository to your local machine.
-2.  Navigate to the project directory.
-3.  Install dependencies by running `npm install`.
-4.  Start the development server by running `npm start`.
-5.  The application should open in your default web browser.
-
-How to Use
-----------
-
-1.  Browse through the list of products.
-2.  Click on the "+" button to add an item to the cart.
-3.  Adjust the quantity of items in the cart using the "+" and "-" buttons.
-4.  Click on the "Remove Cart" button to remove an item from the cart.
-5.  The total price and total quantity of items in the cart will be updated dynamically.
-
+1.  **Installation:**
+    
+    *   Ensure required dependencies are installed (`React`, `Redux`, `React-Redux`, `@reduxjs/toolkit`, etc.).
+    *   Ensure stylesheets (`card.css`) are available and properly linked.
+2.  **Integration:**
+    
+    *   Integrate the `Card` component where the shopping cart is required within the React application.
+    *   Wrap the application with the `DataContext` component to provide Redux store context.
+3.  **Modification:**
+    
+    *   Modify `Card.js` to customize UI or functionality as per requirements.
+    *   Update `CardSlice.js` to extend or modify state management actions and reducers.
+4.  **Development:**
+    
+    *   Run the application using the chosen build tool (`npm`, `yarn`, etc.).
+    *   Debug or extend functionality as needed.
